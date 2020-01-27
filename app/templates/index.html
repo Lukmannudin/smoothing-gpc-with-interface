@@ -6,6 +6,7 @@
     margin-right: 10px;
   }
 </style>
+
 <div class="container">
   <h1>Smoothing Image</h1>
   <hr>
@@ -39,6 +40,16 @@
         <figcaption class="figure-caption text-right">Image Preview</figcaption>
       </figure>
     </div>
+    <div class="col-4">
+      <figure class="figure">
+        {% if imagePath %}
+        <img src="/getImageNoise/" name="imagePreview" class="img-thumbnail">
+        {% else %}
+        <img src="/getImagePlaceholder/" class="img-thumbnail">
+        {% endif %}
+        <figcaption class="figure-caption text-right">Image Noise Added</figcaption>
+      </figure>
+    </div>
   </div>
   <div class="row">
   
@@ -46,7 +57,7 @@
       <label>Median</label>
       <form action="/setMedian" method="POST" >
         <p style="display: flex;">  
-        <input type="number" class="form-control" placeholder="input kernel size"> <input class="btn btn-light" type="submit" value="filter">
+        <input type="number" class="form-control" name="kernel_size" placeholder="input kernel size" required> <input class="btn btn-light" type="submit" value="filter">
       </p>
       </form>
       <figure class="figure">
@@ -56,7 +67,7 @@
         <img src="/getImagePlaceholder/" class="img-thumbnail">
         {% endif %}
         
-        <figcaption class="figure-caption text-right">Result Median</figcaption>
+        <figcaption class="figure-caption text-right">PSNR : {{ psnr }}</figcaption>
       </figure>
     </div>
   </div>

@@ -2,16 +2,19 @@ from flask import render_template,request, redirect, send_from_directory,send_fi
 from app import app
 
 from smoothing.filter_median_size import FilterMedian
+from smoothing.Noise import Noise
 
 import os
 
 app.config['SECRET_KEY'] = 'you-will-never-guess'
-app.config["IMAGE_UPLOADS"] = "/home/codelabs/ngulik/python/microblog/imageuploads"
-app.config["IMAGE_RESULTS"] = "/home/codelabs/ngulik/python/microblog/imageresults"
-app.config["STATIC"] = "/home/codelabs/ngulik/python/microblog/static"
+app.config["IMAGE_UPLOADS"] = "E:\[1]OfflineTugas\GPC\smoothing-gpc-with-interface\imageuploads"
+app.config["IMAGE_RESULTS"] = "E:\[1]OfflineTugas\GPC\smoothing-gpc-with-interface\imageresults"
+app.config["IMAGE_NOISE"] = "E:\[1]OfflineTugas\GPC\smoothing-gpc-with-interface\imagenoise"
+app.config["STATIC"] = "E:\[1]OfflineTugas\GPC\smoothing-gpc-with-interface\static"
 
 
 imagePath = ""
+fileType = "jpg"
 @app.route('/')
 @app.route('/index')
 def index():
@@ -23,10 +26,17 @@ def upload_image():
     if request.method == "POST":
         if request.files:
             image = request.files["image"]
+        
             fileNameSplit = image.filename.split('.')
-            # image.filename = "original_image." + fileNameSplit[len(fileNameSplit)-1]
-            image.filename = "original_image.png"
+            fileType = fileNameSplit[len(fileNameSplit)-1]
+            image.filename = "original_image." + fileType
+            imagePath = image.filename
             image.save(os.path.join(app.config["IMAGE_UPLOADS"], image.filename))
+
+            noise = Noise()
+            noise.addNoise(fileType)
+            
+            #image.filename = "original_image.png"
             print(image.filename)
             print("Image Saved")
             
@@ -56,17 +66,22 @@ def bootstrapcss():
 
 @app.route("/setMedian", methods=["GET", "POST"])
 def setMedian():
-    imageOrigin = "original_image.png"
+    imageOrigin = imagePath
     FilterMedian().main(imageOrigin)
+    median = FilterMedian()
+
+    psnr = median.psnrResult()
+    kernelSize = request.form.get('kernel_size')
+    median.main(kernelSize)
     return render_template("index.html", imagePath = imageOrigin, 
-        medianImage="medianresult.png")
+        medianImage="result_median."+fileType, psnr = psnr)
 
 @app.route("/getImageMedian/")
 def getImageMedian():
     return send_from_directory(
         os.path.join(
             app.config["IMAGE_RESULTS"]
-            ),"medianresult.png"
+            ),"result_median.jpg"
     )
 
 @app.route("/getImagePlaceholder/")
@@ -75,4 +90,16 @@ def getImagePlaceholder():
         os.path.join(
             app.config["STATIC"]
             ),"imageplaceholder.png"
+    )
+
+@app.route("/getImageNoise/")
+def getImageNoise():
+    print( os.path.join(
+           app.config["IMAGE_NOISE"]
+            ),"test_noise_added."+fileType
+            )
+    return send_from_directory(
+        os.path.join(
+           app.config["IMAGE_NOISE"]
+            ),"test_noise_added."+fileType
     )

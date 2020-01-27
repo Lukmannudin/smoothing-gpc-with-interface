@@ -1,7 +1,18 @@
 import numpy as np
-from PIL import Image
+import cv2
+import math
 
 class FilterMedian:
+
+    def __init__(self):
+        self.im1_path = ''
+        self.im_result_path = ''
+        self.im_upload_path = ''
+
+    def set_im1_path(self, fileName):
+        self.im1_path = fileName
+    def get_im1_path(self):
+        return self.im1_path   
 
     def median_filter(self, data, filter_size):
         temp = []
@@ -28,21 +39,39 @@ class FilterMedian:
                 temp = []
         return data_final
 
+    def psnr(self, img1, img2):
+        mse = np.mean( (img1 - img2) ** 2 )
+        if mse == 0:
+            return 100
+        PIXEL_MAX = 255.0
+        return 20 * np.log10((PIXEL_MAX) / math.sqrt(mse))
 
-    # def log10(self,x):
-    #     numerator = tf.math.log(x)
-    #     denominator = tf.math.log(tf.constant(10, dtype=numerator.dtype))
-    #     return numerator / denominator
+    def psnrResult(self):
+        #open result
+        img_result_path = 'imageresults/result_median.jpg'
+        img_result = cv2.imread(img_result_path)
+        #open upload
+        im_upload_path = 'imageuploads/original_image.jpg'
+        img_upload = cv2.imread(im_upload_path)
 
+        psnr_scratch = self.psnr(img_upload, img_result)
+        return psnr_scratch
 
-    def main(self,fileName):
-        img = Image.open("/home/codelabs/ngulik/python/microblog/imageuploads/"+fileName).convert("L")
-        arr = np.array(img)
+    def main(self,filterSize):
+        im1_path = 'imagenoise/test_noise_added.jpg'
+        self.set_im1_path(im1_path)
+        img1 = cv2.imread(im1_path, 0)
+        
+        #run filter
+        print("ini: "+filterSize+ 'end')
         filter_size = 3
-        removed_noise = self.median_filter(arr, filter_size) 
-        img = Image.fromarray(removed_noise)
-        img = img.convert('L')
-        img.save('/home/codelabs/ngulik/python/microblog/imageresults/medianresult.png', "png")
+        removed_noise = self.median_filter(img1, int(filter_size))
+
+        #save image
+        im_result_path = 'imageresults/result_median.jpg'
+        cv2.imwrite(im_result_path,removed_noise)
+
+        
         
 
 # main()
