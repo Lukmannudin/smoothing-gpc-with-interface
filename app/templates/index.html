@@ -1,0 +1,65 @@
+<html>
+<link href="/bootstrapcss" rel="stylesheet" />
+<script src="/bootstrapmin"></script>
+<style>
+  input[type="number"] {
+    margin-right: 10px;
+  }
+</style>
+<div class="container">
+  <h1>Smoothing Image</h1>
+  <hr>
+  <div class="row">
+    <div class="col-4">
+      <script>
+        function submitEvent() {
+          document.getElementById("form").submit();
+        }
+      </script>
+
+      <form action="/upload_image" method="POST" enctype="multipart/form-data" id="form">
+        <div class="form-group">
+          <div class="custom-file">
+            <input type="file" class="custom-file-input" name="image" id="image" onchange="submitEvent()">
+            <label class="custom-file-label" for="image">Select image...</label>
+          </div>
+        </div>
+      </form>
+
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-4">
+      <figure class="figure">
+        {% if imagePath %}
+        <img src="/getImageOrigin/{{ imagePath }}" name="imagePreview" class="img-thumbnail">
+        {% else %}
+        <img src="/getImagePlaceholder/" class="img-thumbnail">
+        {% endif %}
+        <figcaption class="figure-caption text-right">Image Preview</figcaption>
+      </figure>
+    </div>
+  </div>
+  <div class="row">
+  
+    <div class="col-4">
+      <label>Median</label>
+      <form action="/setMedian" method="POST" >
+        <p style="display: flex;">  
+        <input type="number" class="form-control" placeholder="input kernel size"> <input class="btn btn-light" type="submit" value="filter">
+      </p>
+      </form>
+      <figure class="figure">
+        {% if medianImage %}
+        <img src="/getImageMedian" class="img-thumbnail">
+        {% else %}
+        <img src="/getImagePlaceholder/" class="img-thumbnail">
+        {% endif %}
+        
+        <figcaption class="figure-caption text-right">Result Median</figcaption>
+      </figure>
+    </div>
+  </div>
+</div>
+
+</html>
