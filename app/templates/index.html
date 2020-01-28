@@ -52,13 +52,13 @@
     </div>
   </div>
   <div class="row">
-  
     <div class="col-4">
       <label>Median</label>
-      <form action="/setMedian" method="POST" >
-        <p style="display: flex;">  
-        <input type="number" class="form-control" name="kernel_size" placeholder="input kernel size" required> <input class="btn btn-light" type="submit" value="filter">
-      </p>
+      <form action="/setMedian" method="POST">
+        <p style="display: flex;">
+          <input type="number" class="form-control" name="kernel_size" placeholder="input kernel size" required> <input
+            class="btn btn-light" type="submit" value="filter">
+        </p>
       </form>
       <figure class="figure">
         {% if medianImage %}
@@ -66,8 +66,41 @@
         {% else %}
         <img src="/getImagePlaceholder/" class="img-thumbnail">
         {% endif %}
-        
         <figcaption class="figure-caption text-right">PSNR : {{ psnr }}</figcaption>
+      </figure>
+    </div>
+    <div class="col-4">
+      <label>Mean</label>
+      <form action="/setMean" method="POST">
+        <p style="display: flex;">
+          <input type="number" class="form-control" name="kernel_size" placeholder="input kernel size" disabled> <input
+            class="btn btn-light" type="submit" value="filter">
+        </p>
+      </form>
+      <figure class="figure">
+        {% if meanImage %}
+        <img src="/getImageMean" class="img-thumbnail">
+        {% else %}
+        <img src="/getImagePlaceholder/" class="img-thumbnail">
+        {% endif %}
+        <figcaption class="figure-caption text-right">PSNR : {{ psnr2 }}</figcaption>
+      </figure>
+    </div>
+    <div class="col-4">
+      <label>Min</label>
+      <form action="/setMin" method="POST">
+        <p style="display: flex;">
+          <input type="number" class="form-control" name="kernel_size" placeholder="input kernel size" disabled> <input
+            class="btn btn-light" type="submit" value="filter">
+        </p>
+      </form>
+      <figure class="figure">
+        {% if minImage %}
+        <img src="/getImageMin" class="img-thumbnail">
+        {% else %}
+        <img src="/getImagePlaceholder/" class="img-thumbnail">
+        {% endif %}
+        <figcaption class="figure-caption text-right">PSNR : {{ psnr3 }}</figcaption>
       </figure>
     </div>
   </div>

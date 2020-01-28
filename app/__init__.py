@@ -4,4 +4,6 @@ from config import Config
 app = Flask(__name__, static_url_path = "", static_folder = "static")
 app.config.from_object(Config)
 
+
 from app import routes
+# from FilterMedianSize import FilterMedianSize
