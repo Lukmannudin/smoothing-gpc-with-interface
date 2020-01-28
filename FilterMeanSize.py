@@ -42,13 +42,13 @@ class FilterMeanSize:
         psnr_scratch = self.psnr(img_upload, img_result)
         return psnr_scratch
 
-    def main(self):
+    def main(self, filterSize = 3):
         im1_path = self.baseUrl +'imagenoise/test_noise_added.jpg'
         img1 = cv2.imread(im1_path, 0)
 
         #run filter
-        filter_size = 3
-        removed_noise = self.mean_filter(img1, filter_size)
+        # filter_size = 3
+        removed_noise = self.mean_filter(img1, filterSize)
 
         #save image
         im_result_path = self.baseUrl +'imageresults/result_mean.jpg'

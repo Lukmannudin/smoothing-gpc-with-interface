@@ -34,7 +34,7 @@ def upload_image():
         
             fileNameSplit = image.filename.split('.')
             fileType = fileNameSplit[len(fileNameSplit)-1]
-            image.filename = "original_image." + "jpg"
+            image.filename = "original_image.jpg"
             imagePath = image.filename
             image.save(os.path.join(app.config["IMAGE_UPLOADS"], image.filename))
 
@@ -60,6 +60,7 @@ def getImageOrigin(imageName):
             app.config["IMAGE_UPLOADS"]
             ),imageName
     )
+    
 
 @app.route("/bootstrapmin/")
 def bootstrapmin():
@@ -75,48 +76,82 @@ def setMedian():
 
     imagePath = checkImageOrigin()
 
-    meanImage = checkImageMean()
-    minImage = checkImageMin()
+    kernelSize = 3
 
-    kernelSize = request.form.get('kernel_size')
+    if ((request.form.get('kernel_size') != None ) and ((request.form.get('kernel_size') != "" )
+        and ()
+    )) :
+        kernelSize = request.form.get('kernel_size')
+    
     median.main(kernelSize)
+
     psnr = median.psnrResult()
-    return render_template("index.html", imagePath = imagePath, 
-        medianImage="result_median."+fileType, psnr = psnr,
-        meanImage = meanImage, minImage = minImage
-        )
+    return render_template("index.html", imagePath = "original_image.jpg", 
+        medianImage="result_median."+fileType, psnr = psnr)
 
 @app.route("/setMean", methods=["GET", "POST"])
 def setMean():
     imagePath = checkImageOrigin()
 
-    medianImage = checkImageMedian()
-    minImage = checkImageMin()
+    kernelSize = 3
 
-    print(minImage)
+    if ((request.form.get('kernel_size') != None ) and ((request.form.get('kernel_size') != "" )
+        and ()
+    )) :
+        kernelSize = request.form.get('kernel_size')
 
     mean = FilterMeanSize(app.config['BASE_URL'])
-    mean.main()
+    mean.main(kernelSize)
+
     psnr = mean.psnrResult()
-    return render_template("index.html", imagePath = imagePath, 
-        meanImage="result_mean."+fileType, psnr2 = psnr,
-        medianImage = medianImage, minImage = minImage
+    return render_template("index.html", imagePath = "original_image.jpg", 
+        meanImage="result_mean."+fileType, psnr2 = psnr
         )
 
 @app.route("/setMin", methods=["GET", "POST"])
 def setMin():
     imagePath = checkImageOrigin()
-    min = FilterMinSize(app.config['BASE_URL'])
-    min.main()
+    kernelSize = 3
 
-    medianImage = checkImageMedian()
-    meanImage = checkImageMean()
+    if ((request.form.get('kernel_size') != None ) and ((request.form.get('kernel_size') != "" )
+        and ()
+    )) :
+        kernelSize = request.form.get('kernel_size')
+    
+    min = FilterMinSize(app.config['BASE_URL'])
+    min.main(kernelSize)
 
     psnr = min.psnrResult()
-    return render_template("index.html", imagePath = imagePath, 
-        minImage="result_min."+fileType, psnr3 = psnr,
-        medianImage = medianImage, meanImage = meanImage
+    return render_template("index.html", imagePath = "original_image.jpg", 
+        minImage="result_min."+fileType, psnr3 = psnr
         )
+
+@app.route("/setAllFilter", methods=["GET", "POST"])
+def setAllFilter():
+    kernelSize = 3
+
+    if ((request.form.get('kernel_size') != None ) and ((request.form.get('kernel_size') != "" )
+        and ()
+    )) :
+        kernelSize = request.form.get('kernel_size')
+    
+    median = FilterMedianSize(app.config['BASE_URL'])
+    mean = FilterMeanSize(app.config['BASE_URL'])
+    min = FilterMinSize(app.config['BASE_URL'])
+    
+    median.main(kernelSize)
+    mean.main()
+    min.main()
+
+    psnr1 = median.psnrResult()
+    psnr2 = mean.psnrResult()
+    psnr3 = min.psnrResult()
+
+    return render_template("index.html", imagePath = "original_image.jpg",
+        medianImage="result_median."+fileType, psnr = psnr1,
+        meanImage="result_mean."+fileType, psnr2 = psnr2,
+        minImage="result_min."+fileType, psnr3 = psnr3,
+    )
 
 
 @app.route("/getImageMedian/")

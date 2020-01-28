@@ -50,13 +50,26 @@
         <figcaption class="figure-caption text-right">Image Noise Added</figcaption>
       </figure>
     </div>
+
+    <div class="col-4">
+      <form action="/setAllFilter" method="POST">
+        <p style="width: auto; height: auto">
+          <input type="number" class="form-control" name="kernel_size" placeholder="input kernel size"> 
+          <input
+            style="margin-top: 6px;"
+            class="btn btn-success" type="submit" value="Filter All">
+          </p>
+      </form>
+    </div>
+
+
   </div>
   <div class="row">
     <div class="col-4">
       <label>Median</label>
       <form action="/setMedian" method="POST">
         <p style="display: flex;">
-          <input type="number" class="form-control" name="kernel_size" placeholder="input kernel size" required> <input
+          <input type="number" class="form-control" name="kernel_size" placeholder="input kernel size" > <input
             class="btn btn-light" type="submit" value="filter">
         </p>
       </form>
@@ -73,7 +86,7 @@
       <label>Mean</label>
       <form action="/setMean" method="POST">
         <p style="display: flex;">
-          <input type="number" class="form-control" name="kernel_size" placeholder="input kernel size" disabled> <input
+          <input type="number" class="form-control" name="kernel_size" placeholder="input kernel size"> <input
             class="btn btn-light" type="submit" value="filter">
         </p>
       </form>
@@ -90,7 +103,7 @@
       <label>Min</label>
       <form action="/setMin" method="POST">
         <p style="display: flex;">
-          <input type="number" class="form-control" name="kernel_size" placeholder="input kernel size" disabled> <input
+          <input type="number" class="form-control" name="kernel_size" placeholder="input kernel size"> <input
             class="btn btn-light" type="submit" value="filter">
         </p>
       </form>
