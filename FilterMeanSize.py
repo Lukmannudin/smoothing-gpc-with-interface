@@ -1,10 +1,10 @@
 import numpy as np
 import math
-from cv2 import cv2
+import cv2
 
 class FilterMeanSize:
     def __init__(self, path):
-        self.baseUrl = "/home/codelabs/ngulik/python/smoothing-gpc-with-interface/"
+        self.baseUrl = "E:/[1]OfflineTugas/GPC/smoothing-gpc-with-interface/"
         # self.fileNameResult = "result_median.jpg"
         # self.originalImage = "original_image.jpg"
 
@@ -29,21 +29,21 @@ class FilterMeanSize:
         if mse == 0:
             return 100
         PIXEL_MAX = 255.0
-        return 20 * np.log10((PIXEL_MAX) / math.sqrt(mse))
+        return 10 * np.log10((PIXEL_MAX)**2 / (mse))
 
     def psnrResult(self):
         # open result
-        img_result_path = self.baseUrl +'imageresults/result_mean.jpg'
-        img_result = cv2.imread(img_result_path)
+        img_result_path = 'imageresults/result_mean.jpg'
+        img_result = cv2.imread(img_result_path, 0)
         #open upload
-        im_upload_path = self.baseUrl +'imageuploads/original_image.jpg'
-        img_upload = cv2.imread(im_upload_path)
+        im_upload_path = 'imageuploads/original_image.jpg'
+        img_upload = cv2.imread(im_upload_path, 0)
 
         psnr_scratch = self.psnr(img_upload, img_result)
         return psnr_scratch
 
     def main(self, filterSize = 3):
-        im1_path = self.baseUrl +'imagenoise/test_noise_added.jpg'
+        im1_path = 'imagenoise/test_noise_added.jpg'
         img1 = cv2.imread(im1_path, 0)
 
         #run filter
@@ -51,5 +51,5 @@ class FilterMeanSize:
         removed_noise = self.mean_filter(img1, filterSize)
 
         #save image
-        im_result_path = self.baseUrl +'imageresults/result_mean.jpg'
+        im_result_path = 'imageresults/result_mean.jpg'
         cv2.imwrite(im_result_path,removed_noise)

@@ -1,12 +1,12 @@
 import numpy as np
-from cv2 import cv2
+import cv2
 import math
 
 class FilterMedianSize:
 
 
     def __init__(self, path):
-        self.baseUrl = "/home/codelabs/ngulik/python/smoothing-gpc-with-interface/"
+        self.baseUrl = "E:/[1]OfflineTugas/GPC/smoothing-gpc-with-interface/"
         self.fileNameResult = "result_median.jpg"
         self.originalImage = "original_image.jpg"
         self.im1_path = ''
@@ -48,15 +48,15 @@ class FilterMedianSize:
         if mse == 0:
             return 100
         PIXEL_MAX = 255.0
-        return 20 * np.log10((PIXEL_MAX) / math.sqrt(mse))
+        return 10 * np.log10((PIXEL_MAX)**2 / (mse))
 
     def psnrResult(self):
         #open result
         img_result_path = self.baseUrl+'imageresults/'+self.fileNameResult
-        img_result = cv2.imread(img_result_path)
+        img_result = cv2.imread(img_result_path, 0)
         # #open upload
         im_upload_path = self.baseUrl+'imageuploads/'+self.originalImage
-        img_upload = cv2.imread(im_upload_path)
+        img_upload = cv2.imread(im_upload_path, 0)
 
         psnr_scratch = self.psnr(img_upload, img_result)
         return psnr_scratch

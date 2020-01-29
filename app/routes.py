@@ -10,7 +10,7 @@ from Noise import Noise
 import os
 
 app.config['SECRET_KEY'] = 'you-will-never-guess'
-app.config['BASE_URL'] = "/home/codelabs/ngulik/python/smoothing-gpc-with-interface/"
+app.config['BASE_URL'] = "E:/[1]OfflineTugas/GPC/smoothing-gpc-with-interface/"
 
 app.config["IMAGE_UPLOADS"] = app.config['BASE_URL']+"imageuploads"
 app.config["IMAGE_RESULTS"] = app.config['BASE_URL']+"imageresults"
